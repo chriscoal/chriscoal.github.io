@@ -100,18 +100,30 @@ var friendsCount = (array, name) => {
         });
         
     });
-    console.log(theirFriend);
+    // console.log(theirFriend);
     return theirFriend;
 };
 
-var topThreeTags = (array) => {var topThreeTags = (array) => {
-    let tags = {};
-    _.each(array, (e,i,a) => {
-        _.each(array[i]['tags'], (element) => {
-            tags[element] =+ array[i]['name']
-        })
-    })
-    console.log(tags);
+var topThreeTags = (array) => {
+    let tags = _.pluck(array, 'tags');
+    let tagsObj = {};
+    _.each(tags, (e,i,a) => {
+        _.each(a[i], (element) => {
+            if (tagsObj[element]){
+                tagsObj[element]++;
+                return;
+            }
+            tagsObj[element] = 1;
+        });
+    });
+    let tagsArray = [];
+    _.each(tagsObj, (e, i, a) => {
+        tagsArray.push([e, i]);
+    });
+    tagsArray.sort((a, b)=> {
+        return b[0] - a[0];
+    });
+    return [tagsArray[0][1], tagsArray[1][1], tagsArray[2][1]];
 };
 
 var genderCount = (array) => {
